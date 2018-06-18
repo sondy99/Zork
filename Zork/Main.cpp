@@ -8,6 +8,6 @@ int main()
 	
 	world->StartGame();
 
-	system("pause");
+	system("Game Over");
 	return 0;
 }

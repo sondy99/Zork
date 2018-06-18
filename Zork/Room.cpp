@@ -130,7 +130,7 @@ void Room::TakeALook()
 	{
 		cout << "There seems to be useful items around:" << endl;
 		for (unsigned int i = 0; i < items.size(); i++) {
-			cout << items.at(i)->GetName() << endl;
+			cout << items.at(i)->GetDescription() << endl;
 		}
 	}
 }

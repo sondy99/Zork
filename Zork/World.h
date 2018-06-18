@@ -23,6 +23,10 @@ static const string LOOK = "LOOK";
 static const string TAKE = "TAKE";
 static const string USE = "USE";
 static const string DROP = "DROP";
+static const string EQUIP = "EQUIP";
+static const string UNEQUIP = "UNEQUIP";
+static const string STATS = "STATS";
+static const string EXIT_GAME = "EXIT";
 
 class World
 {

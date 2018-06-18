@@ -6,10 +6,11 @@ Player::Player()
 {
 }
 
-Player::Player(string pName, Room* pActualLocation)
+Player::Player(string pName, Room* pActualLocation, int pHitpoints)
 {
 	name = pName;
 	actualLocation = pActualLocation;
+	hitpoints = pHitpoints;
 }
 
 Player::~Player()
@@ -33,8 +34,7 @@ void Player::Take(string pItem)
 
 	if (item != nullptr)
 	{
-		inventroy.push_back(item);
-		cout << item->GetName() << " added to the inventory." << endl;
+		Player::IntroduceItemInTheInventory(item);
 	}
 	else {
 		cout << "There is not item named like that." << endl;
@@ -50,12 +50,12 @@ void Player::Drop(string pItem)
 {
 	Item* item = nullptr;
 	int itemIndex = -1;
-	for (unsigned int i = 0; i < inventroy.size(); i++)
+	for (unsigned int i = 0; i < inventory.size(); i++)
 	{
 
-		if (inventroy.at(i)->GetName() == pItem)
+		if (inventory.at(i)->GetName() == pItem)
 		{
-			item = inventroy.at(i);
+			item = inventory.at(i);
 			itemIndex = i;
 		}
 	}
@@ -63,7 +63,7 @@ void Player::Drop(string pItem)
 	if (itemIndex != -1)
 	{
 		actualLocation->DropItem(item);
-		inventroy.erase(inventroy.begin() + itemIndex);
+		inventory.erase(inventory.begin() + itemIndex);
 		cout << item->GetName() << " dropped." << endl;
 	}
 
@@ -76,10 +76,10 @@ void Player::Look()
 
 void Player::PrintInventory()
 {
-	if (inventroy.size() > 0)
+	if (inventory.size() > 0)
 	{
-		for (unsigned int i = 0; i < inventroy.size(); i++) {
-			cout << inventroy.at(i)->GetName() << " / " << inventroy.at(i)->GetDescription() << endl;
+		for (unsigned int i = 0; i < inventory.size(); i++) {
+			cout << inventory.at(i)->GetName() << " / " << inventory.at(i)->GetDescription() << endl;
 		}
 	}
 	else 

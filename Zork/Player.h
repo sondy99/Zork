@@ -11,7 +11,7 @@ class Player : public Creature
 {
 public:
 	Player();
-	Player(string pName, Room* pActualLocation);
+	Player(string pName, Room* pActualLocation, int pHitpoints);
 	~Player();
 
 	void Go(string pDirection);
@@ -20,8 +20,8 @@ public:
 	void Drop(string pItem);
 	void Look();
 	void PrintInventory();
+
 private:
-	vector<Item*> inventroy;
 
 };
 

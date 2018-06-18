@@ -13,6 +13,13 @@ World::World()
 	Item* ball = new Item("BALL", "Simple big rock.");
 	Item* rose = new Item("ROSE", "Simple rose.");
 
+
+	Item* swordUno = new Item("SWORD", "SWORD.", WEAPON,3,2);
+	Item* swordDos = new Item("AXE", "AXE.", WEAPON,4,1);
+	Item* spearUno = new Item("SPEAR", "SPEAR.", WEAPON,5,0);
+	Item* armorUno = new Item("ARMOR", "ARMOR.", ARMOUR,0,3);
+	Item* legsUno = new Item("LEGS", "LEGS.", ARMOUR,0,2);
+
 	roomUno->AddLocation(NORTH, roomDos, true, key);
 	roomUno->AddLocation(SOUTH, roomTres);
 
@@ -34,9 +41,13 @@ World::World()
 	roomDos->AddItem(ball);
 
 	roomUno->AddItem(rose);
+	roomUno->AddItem(swordUno);
+	roomUno->AddItem(swordDos);
+	roomUno->AddItem(armorUno);
+	roomUno->AddItem(spearUno);
+	roomUno->AddItem(legsUno);
 
-
-	player = new Player("Sondy", roomUno);
+	player = new Player("Sondy", roomUno, 20);
 
 	LocationCommand.push_back(NORTH);
 	LocationCommand.push_back(SOUTH);
@@ -46,6 +57,8 @@ World::World()
 	LocationCommand.push_back(DOWN);
 
 	roomUno->TakeALook();
+
+	cout << endl;
 }
 
 World::~World()
@@ -65,7 +78,13 @@ void World::StartGame()
 
 		ManageCommand(commandByUser);
 
-		gameOver = commandByUser == "exit";
+		cout << endl;
+
+		if (commandByUser == EXIT_GAME)
+		{
+			//todo Imprimir stats de game over
+			gameOver = true;
+		}
 	}
 }
 
@@ -95,6 +114,10 @@ void World::ManageCommand(string command)
 			{
 				player->Look();
 			}
+			else if (separatedCommands[0] == STATS)
+			{
+				player->Stats();
+			}
 			else
 			{
 				cout << "Command unknown" << endl;
@@ -114,6 +137,14 @@ void World::ManageCommand(string command)
 			else if (separatedCommands[0] == DROP)
 			{
 				player->Drop(separatedCommands[1]);
+			}
+			else if (separatedCommands[0] == EQUIP)
+			{
+				player->Equip(separatedCommands[1]);
+			}
+			else if (separatedCommands[0] == UNEQUIP)
+			{
+				player->Unequip(separatedCommands[1]);
 			}
 			else
 			{
