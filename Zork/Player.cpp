@@ -6,11 +6,12 @@ Player::Player()
 {
 }
 
-Player::Player(string pName, Room* pActualLocation, int pHitpoints)
+Player::Player(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit)
 {
 	name = pName;
 	actualLocation = pActualLocation;
 	hitpoints = pHitpoints;
+	maxHit = pMaxHit;
 }
 
 Player::~Player()

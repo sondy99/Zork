@@ -1,15 +1,26 @@
 #include "Creature.h"
 #include "Item.h"
+#include "Room.h"
 
 Creature::Creature()
 {
 }
 
-Creature::Creature(string pName, Room* pActualLocation, int pHitpoints)
+Creature::Creature(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit)
 {
 	name = pName;
 	actualLocation = pActualLocation;
 	hitpoints = pHitpoints;
+	maxHit = pMaxHit;
+}
+
+Creature::Creature(string pName, Room* pActualLocation, int pHitpoints, string pDescription, int pMaxHit)
+{
+	name = pName;
+	actualLocation = pActualLocation;
+	hitpoints = pHitpoints;
+	description = pDescription;
+	maxHit = pMaxHit;
 }
 
 Creature::~Creature()
@@ -89,8 +100,24 @@ void Creature::Unequip(string pItemName)
 	Creature::ManageStats();
 }
 
-void Creature::Atack(Creature * pCreature)
+void Creature::Attack(string pCreatureName)
 {
+	int damageTaken = actualLocation->Attack(Creature::CalculateDamage(), pCreatureName);
+
+	hitpoints -= damageTaken;
+}
+
+int Creature::CalculateDamage()
+{
+	return (rand() % (maxHit + 1)) + atk;;
+}
+
+void Creature::TakeDamage(int pDamage)
+{
+	if (Creature::IsAlive())
+	{
+		hitpoints -= pDamage;
+	}
 }
 
 Item * Creature::GetItemFromInventory(string pName)
@@ -160,6 +187,11 @@ void Creature::ManageStats()
 	{
 		def += armor->GetDef();
 	}
+}
+
+bool Creature::IsAlive()
+{
+	return hitpoints > 0;
 }
 
 void Creature::Stats()

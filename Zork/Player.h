@@ -11,7 +11,7 @@ class Player : public Creature
 {
 public:
 	Player();
-	Player(string pName, Room* pActualLocation, int pHitpoints);
+	Player(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit = 1);
 	~Player();
 
 	void Go(string pDirection);

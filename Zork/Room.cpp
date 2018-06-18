@@ -1,4 +1,5 @@
 #include "Room.h"
+#include "Creature.h"
 
 Room::Room()
 {
@@ -96,6 +97,11 @@ void Room::AddItem(Item* pItem)
 	items.push_back(pItem);
 }
 
+void Room::AddCreature(Creature * pCreature)
+{
+	creatures.push_back(pCreature);
+}
+
 void Room::DropItem(Item * pItem)
 {
 	items.push_back(pItem);
@@ -126,11 +132,60 @@ void Room::TakeALook()
 	cout << GetName() << endl;
 	cout << GetDescription() << endl;
 
+	if (creatures.size() > 0)
+	{
+		for (unsigned int i = 0; i < creatures.size(); i++) {
+			cout << creatures.at(i)->GetDescription() << endl;
+		}
+	}
+
 	if (items.size() > 0)
 	{
-		cout << "There seems to be useful items around:" << endl;
 		for (unsigned int i = 0; i < items.size(); i++) {
 			cout << items.at(i)->GetDescription() << endl;
 		}
+	}
+}
+
+int Room::Attack(int pDamage, string pCreatureName)
+{
+	int returnDamage = 0;
+	bool someCreatureAttacked = false;
+	
+	if (creatures.size() > 0)
+	{
+		int indexCreatureDead = -1;
+		for (unsigned int i = 0; i < creatures.size(); i++)
+		{
+			if (creatures.at(i)->GetName() == pCreatureName) 
+			{
+				creatures.at(i)->TakeDamage(pDamage);
+
+				if (!creatures.at(i)->IsAlive())
+				{
+					cout << creatures.at(i)->GetName() << " is dead." << endl;
+					indexCreatureDead = i;
+				}
+				else
+				{
+					returnDamage = creatures.at(i)->CalculateDamage();
+					cout << "Hit: " << pDamage << " to " << creatures.at(i)->GetName() << "." << endl;
+				}
+
+				someCreatureAttacked = true;
+			}
+		}
+
+		if (indexCreatureDead != -1)
+		{
+			creatures.erase(creatures.begin() + indexCreatureDead);
+		}
+
+		if (!someCreatureAttacked) 
+		{
+			cout << "There is no creature like that." << endl;
+		}
+
+		return returnDamage;
 	}
 }

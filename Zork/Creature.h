@@ -10,20 +10,25 @@ class Creature : public Entity
 {
 public:
 	Creature();
-	Creature(string pName, Room* pActualLocation, int pHitpoints);
+	Creature(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit = 1);
+	Creature(string pName, Room* pActualLocation, int pHitpoints, string pDescription, int pMaxHit = 1);
+	
 	~Creature();
 
 	void Equip(string pItemName);
 	void Unequip(string pItemName);
-	void Atack(Creature* pCreature);
+	void Attack(string pCreatureName);
+	int CalculateDamage();
+	void TakeDamage(int pDamage);
+	bool IsAlive();
 	void Stats();
 
 protected:
-	string name;
 	Room* actualLocation;
 	int hitpoints;
 	int atk = 0;
 	int def = 0;
+	int maxHit = 4;
 	Item* rightHand = nullptr;
 	Item* leftHand = nullptr;
 	Item* armor = nullptr;

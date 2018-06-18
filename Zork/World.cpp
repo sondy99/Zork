@@ -47,7 +47,6 @@ World::World()
 	roomUno->AddItem(spearUno);
 	roomUno->AddItem(legsUno);
 
-	player = new Player("Sondy", roomUno, 20);
 
 	LocationCommand.push_back(NORTH);
 	LocationCommand.push_back(SOUTH);
@@ -55,6 +54,14 @@ World::World()
 	LocationCommand.push_back(EAST);
 	LocationCommand.push_back(UP);
 	LocationCommand.push_back(DOWN);
+
+	player = new Player("Sondy", roomUno, 50, 8);
+
+	Creature* rat = new Creature("RAT", roomUno, 15, "a super rat", 4);
+	Creature* snake = new Creature("SNAKE", roomUno, 25, "a little snake", 6);
+
+	roomUno->AddCreature(rat);
+	roomUno->AddCreature(snake);
 
 	roomUno->TakeALook();
 
@@ -145,6 +152,10 @@ void World::ManageCommand(string command)
 			else if (separatedCommands[0] == UNEQUIP)
 			{
 				player->Unequip(separatedCommands[1]);
+			}
+			else if (separatedCommands[0] == ATTACK)
+			{
+				player->Attack(separatedCommands[1]);
 			}
 			else
 			{

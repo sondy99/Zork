@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "Item.h"
 
+class Creature;
+
 class Room : public Entity
 {
 public:
@@ -16,9 +18,11 @@ public:
 	Room* GoTo(string pDirection);
 	Item* GetItem(string pItem);
 	void AddItem(Item* pItem);
+	void AddCreature(Creature* pCreature);
 	void DropItem(Item* pItem);
 	void UseItem(string pItem);
 	void TakeALook();
+	int Attack(int pDamage, string pCreatureName);
 
 	struct Location {
 		string direction;
@@ -30,6 +34,7 @@ public:
 private:
 	vector<Location> locations;
 	vector<Item*> items;
+	vector<Creature*> creatures;
 };
 
 #endif //__Room__

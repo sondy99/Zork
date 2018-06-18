@@ -26,6 +26,7 @@ static const string DROP = "DROP";
 static const string EQUIP = "EQUIP";
 static const string UNEQUIP = "UNEQUIP";
 static const string STATS = "STATS";
+static const string ATTACK = "ATTACK";
 static const string EXIT_GAME = "EXIT";
 
 class World
