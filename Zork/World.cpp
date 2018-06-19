@@ -23,7 +23,7 @@ World::World()
 	roomUno->AddLocation(NORTH, roomDos, true, key);
 	roomUno->AddLocation(SOUTH, roomTres);
 
-	roomDos->AddLocation(SOUTH, roomUno);
+	//roomDos->AddLocation(SOUTH, roomUno);
 	roomDos->AddLocation(WEST, roomCuatro);
 
 	roomTres->AddLocation(NORTH, roomUno);
@@ -48,17 +48,13 @@ World::World()
 	roomUno->AddItem(legsUno);
 
 
-	LocationCommand.push_back(NORTH);
-	LocationCommand.push_back(SOUTH);
-	LocationCommand.push_back(WEST);
-	LocationCommand.push_back(EAST);
-	LocationCommand.push_back(UP);
-	LocationCommand.push_back(DOWN);
-
 	player = new Player("Sondy", roomUno, 50, 8);
 
 	Creature* rat = new Creature("RAT", roomUno, 15, "a super rat", 4);
 	Creature* snake = new Creature("SNAKE", roomUno, 25, "a little snake", 6);
+
+	creatures.push_back(rat);
+	creatures.push_back(snake);
 
 	roomUno->AddCreature(rat);
 	roomUno->AddCreature(snake);
@@ -66,6 +62,15 @@ World::World()
 	roomUno->TakeALook();
 
 	cout << endl;
+
+	LocationCommand.push_back(NORTH);
+	LocationCommand.push_back(SOUTH);
+	LocationCommand.push_back(WEST);
+	LocationCommand.push_back(EAST);
+	LocationCommand.push_back(UP);
+	LocationCommand.push_back(DOWN);
+
+	World::RecurrentEvents([&] {World::Event(); }, 1000);
 }
 
 World::~World()
@@ -132,6 +137,10 @@ void World::ManageCommand(string command)
 			{
 				player->Stats();
 			}
+			else if (separatedCommands[0] == TIME)
+			{
+				cout << "Time:" << sec << " sec." << endl;
+			}
 			else
 			{
 				cout << "Command unknown" << endl;
@@ -191,4 +200,40 @@ bool World::IsLocationCommand(string command)
 	}
 
 	return result;
+}
+
+void World::RecurrentEvents(function<void(void)> event, unsigned int interval)
+{
+	std::thread([event, interval]() {
+		while (true)
+		{
+			event();
+			std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+		}
+	}).detach();
+}
+
+void World::Event() 
+{
+	sec++;
+
+	if (sec % 5 == 0) {
+		Creature* creatureRandom = creatures[(rand() % (creatures.size()))];
+
+		//Move creature random to a location random
+		creatureRandom->Go(LocationCommand[(rand() % (LocationCommand.size()))]);
+
+		//Creature attack randomly to the player
+		if (creatureRandom->GetCurrenLocation()->GetName() == player->GetCurrenLocation()->GetName()) 
+		{
+			if (rand() % 2 == 1) 
+			{
+				int damage = creatureRandom->CalculateDamage();
+				player->TakeDamage(damage);
+				cout << "The " << creatureRandom->GetName() << " attacked you." << endl;
+				cout << "Hit: " << damage << " to YOU." << endl;
+			}
+		}
+	}
+
 }

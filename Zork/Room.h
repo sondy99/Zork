@@ -15,14 +15,15 @@ public:
 
 	void AddLocation(string pDirection, Room* pRoom);
 	void AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem);
-	Room* GoTo(string pDirection);
+	Room* GoTo(string pDirection, EntityType pEntityType);
 	Item* GetItem(string pItem);
 	void AddItem(Item* pItem);
 	void AddCreature(Creature* pCreature);
+	void RemoveCreature(string pCreatureName);
 	void DropItem(Item* pItem);
 	void UseItem(string pItem);
 	void TakeALook();
-	int Attack(int pDamage, string pCreatureName);
+	Creature* GetCreature(string pCreatureName);
 
 	struct Location {
 		string direction;

@@ -14,7 +14,6 @@ public:
 	Player(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit = 1);
 	~Player();
 
-	void Go(string pDirection);
 	void Take(string pItem);
 	void Use(string pItem);
 	void Drop(string pItem);

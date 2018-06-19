@@ -2,6 +2,9 @@
 #define __World__
 
 #include <iostream>
+#include <chrono>
+#include <thread>
+#include <functional>
 #include <stdlib.h>
 #include <string>
 #include <vector>
@@ -28,6 +31,7 @@ static const string UNEQUIP = "UNEQUIP";
 static const string STATS = "STATS";
 static const string ATTACK = "ATTACK";
 static const string EXIT_GAME = "EXIT";
+static const string TIME = "TIME";
 
 class World
 {
@@ -38,11 +42,14 @@ public:
 	void StartGame();
 private:
 	vector<string> LocationCommand;
-	vector<Room> rooms;
+	vector<Creature*> creatures;
 	Player* player;
+	int sec = 0;
 
 	bool IsLocationCommand(string command);
 	void ManageCommand(string command);
+	void RecurrentEvents(function<void(void)> func, unsigned int interval);
+	void Event();
 };
 
 #endif //__World__

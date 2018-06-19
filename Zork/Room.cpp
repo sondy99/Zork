@@ -39,7 +39,7 @@ void Room::AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem
 	locations.push_back(location);
 }
 
-Room* Room::GoTo(string pDirection)
+Room* Room::GoTo(string pDirection, EntityType pEntityType)
 {
 	Room* result = nullptr;
 	bool locked = false;
@@ -54,13 +54,16 @@ Room* Room::GoTo(string pDirection)
 			}
 			else
 			{
-				cout << "The door is locked." << endl;
+				if (pEntityType == PLAYER)
+				{
+					cout << "The door is locked." << endl;
+				}
 				locked = true;
 			}
 		}
 	}
 
-	if (result == nullptr && !locked)
+	if (result == nullptr && !locked && pEntityType == PLAYER)
 	{
 		cout << "There is no place to go that way." << endl;
 	}
@@ -100,6 +103,26 @@ void Room::AddItem(Item* pItem)
 void Room::AddCreature(Creature * pCreature)
 {
 	creatures.push_back(pCreature);
+}
+
+void Room::RemoveCreature(string pCreatureName)
+{
+	if (creatures.size() > 0)
+	{
+		int indexCreature = -1;
+		for (unsigned int i = 0; i < creatures.size(); i++)
+		{
+			if (creatures.at(i)->GetName() == pCreatureName)
+			{
+				indexCreature = i;
+			}
+		}
+
+		if (indexCreature != -1)
+		{
+			creatures.erase(creatures.begin() + indexCreature);
+		}
+	}
 }
 
 void Room::DropItem(Item * pItem)
@@ -147,45 +170,20 @@ void Room::TakeALook()
 	}
 }
 
-int Room::Attack(int pDamage, string pCreatureName)
+Creature* Room::GetCreature(string pCreatureName)
 {
-	int returnDamage = 0;
-	bool someCreatureAttacked = false;
-	
+	Creature* resutl = nullptr;
+
 	if (creatures.size() > 0)
 	{
-		int indexCreatureDead = -1;
 		for (unsigned int i = 0; i < creatures.size(); i++)
 		{
-			if (creatures.at(i)->GetName() == pCreatureName) 
+			if (creatures.at(i)->GetName() == pCreatureName)
 			{
-				creatures.at(i)->TakeDamage(pDamage);
-
-				if (!creatures.at(i)->IsAlive())
-				{
-					cout << creatures.at(i)->GetName() << " is dead." << endl;
-					indexCreatureDead = i;
-				}
-				else
-				{
-					returnDamage = creatures.at(i)->CalculateDamage();
-					cout << "Hit: " << pDamage << " to " << creatures.at(i)->GetName() << "." << endl;
-				}
-
-				someCreatureAttacked = true;
+				resutl = creatures.at(i);
 			}
 		}
-
-		if (indexCreatureDead != -1)
-		{
-			creatures.erase(creatures.begin() + indexCreatureDead);
-		}
-
-		if (!someCreatureAttacked) 
-		{
-			cout << "There is no creature like that." << endl;
-		}
-
-		return returnDamage;
 	}
+
+	return resutl;
 }

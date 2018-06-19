@@ -15,6 +15,7 @@ public:
 	
 	~Creature();
 
+	void Go(string pDirection);
 	void Equip(string pItemName);
 	void Unequip(string pItemName);
 	void Attack(string pCreatureName);
@@ -22,9 +23,11 @@ public:
 	void TakeDamage(int pDamage);
 	bool IsAlive();
 	void Stats();
+	Room* GetCurrenLocation();
 
 protected:
-	Room* actualLocation;
+	Room* currentLocation;
+	EntityType entityType;
 	int hitpoints;
 	int atk = 0;
 	int def = 0;

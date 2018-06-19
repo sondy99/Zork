@@ -9,29 +9,19 @@ Player::Player()
 Player::Player(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit)
 {
 	name = pName;
-	actualLocation = pActualLocation;
+	currentLocation = pActualLocation;
 	hitpoints = pHitpoints;
 	maxHit = pMaxHit;
+	entityType = PLAYER;
 }
 
 Player::~Player()
 {
 }
 
-void Player::Go(string pDirection)
-{
-	Room* posibleLocation = actualLocation->GoTo(pDirection);
-
-	if (posibleLocation != nullptr)
-	{
-		actualLocation = posibleLocation;
-		actualLocation->TakeALook();
-	}
-}
-
 void Player::Take(string pItem)
 {
-	Item* item = actualLocation->GetItem(pItem);
+	Item* item = currentLocation->GetItem(pItem);
 
 	if (item != nullptr)
 	{
@@ -44,7 +34,7 @@ void Player::Take(string pItem)
 
 void Player::Use(string pItem)
 {
-	actualLocation->UseItem(pItem);
+	currentLocation->UseItem(pItem);
 }
 
 void Player::Drop(string pItem)
@@ -63,7 +53,7 @@ void Player::Drop(string pItem)
 
 	if (itemIndex != -1)
 	{
-		actualLocation->DropItem(item);
+		currentLocation->DropItem(item);
 		inventory.erase(inventory.begin() + itemIndex);
 		cout << item->GetName() << " dropped." << endl;
 	}
@@ -72,7 +62,7 @@ void Player::Drop(string pItem)
 
 void Player::Look()
 {
-	actualLocation->TakeALook();
+	currentLocation->TakeALook();
 }
 
 void Player::PrintInventory()

@@ -9,22 +9,44 @@ Creature::Creature()
 Creature::Creature(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit)
 {
 	name = pName;
-	actualLocation = pActualLocation;
+	currentLocation = pActualLocation;
 	hitpoints = pHitpoints;
 	maxHit = pMaxHit;
+	entityType = CREATURE;
 }
 
 Creature::Creature(string pName, Room* pActualLocation, int pHitpoints, string pDescription, int pMaxHit)
 {
 	name = pName;
-	actualLocation = pActualLocation;
+	currentLocation = pActualLocation;
 	hitpoints = pHitpoints;
 	description = pDescription;
 	maxHit = pMaxHit;
+	entityType = CREATURE;
 }
 
 Creature::~Creature()
 {
+}
+
+void Creature::Go(string pDirection)
+{
+	Room* newLocation = currentLocation->GoTo(pDirection, entityType);
+
+	if (newLocation != nullptr)
+	{
+		if (entityType == CREATURE)
+		{
+			currentLocation->RemoveCreature(name);
+			newLocation->AddCreature(this);
+		} 
+		else
+		{
+			newLocation->TakeALook();
+		}
+
+		currentLocation = newLocation;
+	}
 }
 
 void Creature::Equip(string pItemName)
@@ -102,11 +124,32 @@ void Creature::Unequip(string pItemName)
 
 void Creature::Attack(string pCreatureName)
 {
-	int damageTaken = actualLocation->Attack(Creature::CalculateDamage(), pCreatureName);
+	Creature* target = currentLocation->GetCreature(pCreatureName);
 
-	hitpoints -= damageTaken;
+	if (target != nullptr)
+	{
+		int damage = Creature::CalculateDamage();
+		target->TakeDamage(damage);
 
-	cout << "Hit: " << damageTaken << " to YOU." << endl;
+		cout << "Hit: " << damage << " to " << pCreatureName << "." << endl;
+
+		if (!target->IsAlive())
+		{
+			cout << target->GetName() << " is dead." << endl;
+			currentLocation->RemoveCreature(target->GetName());
+			//destruir criatura
+		}
+		else
+		{
+			int returnDamage = target->CalculateDamage() - def;
+			hitpoints -= returnDamage;
+			cout << "Hit: " << returnDamage << " to YOU." << endl;
+		}
+	}
+	else
+	{
+		cout << "There is no creature like that." << endl;
+	}
 }
 
 int Creature::CalculateDamage()
@@ -208,4 +251,9 @@ void Creature::Stats()
 	cout << "Armor: " << armorMessage << endl;
 	cout << "Right hand: " << rightHandMessage << endl;
 	cout << "Left hand: " << leftHandMessage << endl;
+}
+
+Room* Creature::GetCurrenLocation()
+{
+	return currentLocation;
 }
