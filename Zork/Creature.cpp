@@ -105,6 +105,8 @@ void Creature::Attack(string pCreatureName)
 	int damageTaken = actualLocation->Attack(Creature::CalculateDamage(), pCreatureName);
 
 	hitpoints -= damageTaken;
+
+	cout << "Hit: " << damageTaken << " to YOU." << endl;
 }
 
 int Creature::CalculateDamage()

@@ -8,6 +8,8 @@ int main()
 	
 	world->StartGame();
 
-	system("Game Over");
+	cout << "Game Over." << endl;
+
+	cin.get();
 	return 0;
 }

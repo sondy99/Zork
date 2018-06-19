@@ -83,9 +83,16 @@ void World::StartGame()
 
 		transform(commandByUser.begin(), commandByUser.end(), commandByUser.begin(), ::toupper);
 
-		ManageCommand(commandByUser);
-
-		cout << endl;
+		if (player->IsAlive())
+		{
+			ManageCommand(commandByUser);
+			cout << endl;
+		}
+		else
+		{
+			commandByUser = EXIT_GAME;
+			cout << "You are dead." << endl;
+		}
 
 		if (commandByUser == EXIT_GAME)
 		{
