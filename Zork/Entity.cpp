@@ -19,6 +19,11 @@ string Entity::GetName()
 	return name;
 }
 
+World * Entity::GetWorld()
+{
+	return world;
+}
+
 void Entity::PrintName()
 {
 	cout << name << endl;

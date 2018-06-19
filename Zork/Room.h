@@ -17,13 +17,10 @@ public:
 	void AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem);
 	Room* GoTo(string pDirection, EntityType pEntityType);
 	Item* GetItem(string pItem);
+	vector<Item*> GetItems();
 	void AddItem(Item* pItem);
-	void AddCreature(Creature* pCreature);
-	void RemoveCreature(string pCreatureName);
 	void DropItem(Item* pItem);
 	void UseItem(string pItem);
-	void TakeALook();
-	Creature* GetCreature(string pCreatureName);
 
 	struct Location {
 		string direction;

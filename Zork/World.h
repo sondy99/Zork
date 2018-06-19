@@ -12,6 +12,8 @@
 #include "Room.h"
 #include "Player.h"
 
+class Enemy;
+
 using namespace std;
 
 static const string HELP = "HELP";
@@ -38,11 +40,14 @@ class World
 public:
 	World();
 	~World();
-	
+
+	vector<Enemy*> GetEnemies();
+	Enemy* GetEnemy(string pEnemyName);
+	void RemoveCreature(string pCreatureName);
 	void StartGame();
 private:
 	vector<string> LocationCommand;
-	vector<Creature*> creatures;
+	vector<Enemy*> creatures;
 	Player* player;
 	int sec = 0;
 

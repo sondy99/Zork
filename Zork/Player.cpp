@@ -1,15 +1,18 @@
+#include "World.h"
 #include "Player.h"
 #include "Room.h"
 #include "Item.h"
+#include "Enemy.h"
 
 Player::Player()
 {
 }
 
-Player::Player(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit)
+Player::Player(string pName, Room* pActualLocation, World* pWorld, int pHitpoints, int pMaxHit)
 {
 	name = pName;
 	currentLocation = pActualLocation;
+	world = pWorld;
 	hitpoints = pHitpoints;
 	maxHit = pMaxHit;
 	entityType = PLAYER;
@@ -17,6 +20,17 @@ Player::Player(string pName, Room* pActualLocation, int pHitpoints, int pMaxHit)
 
 Player::~Player()
 {
+}
+
+void Player::Go(string pDirection)
+{
+	Room* newLocation = currentLocation->GoTo(pDirection, entityType);
+
+	if (newLocation != nullptr)
+	{
+		currentLocation = newLocation;
+		Player::Look();
+	}
 }
 
 void Player::Take(string pItem)
@@ -62,7 +76,27 @@ void Player::Drop(string pItem)
 
 void Player::Look()
 {
-	currentLocation->TakeALook();
+	cout << currentLocation->GetName() << endl;
+	cout << currentLocation->GetDescription() << endl;
+
+	vector<Enemy*> creatures = world->GetEnemies();
+	if (creatures.size() > 0)
+	{
+		for (unsigned int i = 0; i < creatures.size(); i++) {
+			if (creatures.at(i)->GetCurrenLocation()->GetName() == currentLocation->GetName())
+			{
+				cout << creatures.at(i)->GetDescription() << endl;
+			}
+		}
+	}
+
+	vector<Item*> items = currentLocation->GetItems();
+	if (items.size() > 0)
+	{
+		for (unsigned int i = 0; i < items.size(); i++) {
+			cout << items.at(i)->GetDescription() << endl;
+		}
+	}
 }
 
 void Player::PrintInventory()
@@ -79,4 +113,32 @@ void Player::PrintInventory()
 	}
 }
 
+void Player::Attack(string pCreatureName)
+{
+	Enemy* target = world->GetEnemy(pCreatureName);
+
+	if (target != nullptr)
+	{
+		int damage = Player::CalculateDamage();
+		target->TakeDamage(damage);
+
+		cout << "Hit: " << damage << " to " << pCreatureName << "." << endl;
+
+		if (!target->IsAlive())
+		{
+			cout << target->GetName() << " is dead." << endl;
+			world->RemoveCreature(target->GetName());
+		}
+		else
+		{
+			int returnDamage = target->CalculateDamage() - def;
+			hitpoints -= returnDamage;
+			cout << "Hit: " << returnDamage << " to YOU." << endl;
+		}
+	}
+	else
+	{
+		cout << "There is no creature like that." << endl;
+	}
+}
 

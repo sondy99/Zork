@@ -7,6 +7,8 @@
 #include <vector>
 #include <stdlib.h>
 
+class World;
+
 using namespace std;
 
 enum EntityType
@@ -16,6 +18,7 @@ enum EntityType
 	EXIT,
 	ITEM,
 	CREATURE,
+	ENEMY,
 	PLAYER
 };
 
@@ -27,11 +30,13 @@ public:
 	~Entity();
 
 	string GetName();
+	World* GetWorld();
 	void PrintName();
 	string GetDescription();
 	void PrintDescription();
 
 protected:
+	World* world;
 	string name;
 	string description;
 

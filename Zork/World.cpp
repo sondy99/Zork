@@ -1,4 +1,6 @@
 #include "World.h"
+#include "Enemy.h"
+
 World::World()
 {
 	Room* roomUno = new Room("roomUno", "habitacion 1 norte o sur");
@@ -23,7 +25,7 @@ World::World()
 	roomUno->AddLocation(NORTH, roomDos, true, key);
 	roomUno->AddLocation(SOUTH, roomTres);
 
-	//roomDos->AddLocation(SOUTH, roomUno);
+	roomDos->AddLocation(SOUTH, roomUno);
 	roomDos->AddLocation(WEST, roomCuatro);
 
 	roomTres->AddLocation(NORTH, roomUno);
@@ -48,18 +50,15 @@ World::World()
 	roomUno->AddItem(legsUno);
 
 
-	player = new Player("Sondy", roomUno, 50, 8);
+	player = new Player("Sondy", roomUno, this, 50, 8);
 
-	Creature* rat = new Creature("RAT", roomUno, 15, "a super rat", 4);
-	Creature* snake = new Creature("SNAKE", roomUno, 25, "a little snake", 6);
+	Enemy* rat = new Enemy("RAT", roomUno, this, 15, "a super rat", 4);
+	Enemy* snake = new Enemy("SNAKE", roomUno, this, 25, "a little snake", 6);
 
 	creatures.push_back(rat);
 	creatures.push_back(snake);
 
-	roomUno->AddCreature(rat);
-	roomUno->AddCreature(snake);
-
-	roomUno->TakeALook();
+	player->Look();
 
 	cout << endl;
 
@@ -75,6 +74,49 @@ World::World()
 
 World::~World()
 {
+}
+
+vector<Enemy*> World::GetEnemies()
+{
+	return creatures;
+}
+
+Enemy * World::GetEnemy(string pEnemyName)
+{
+	Enemy* resutl = nullptr;
+
+	if (creatures.size() > 0)
+	{
+		for (unsigned int i = 0; i < creatures.size(); i++)
+		{
+			if (creatures.at(i)->GetName() == pEnemyName)
+			{
+				resutl = creatures.at(i);
+			}
+		}
+	}
+
+	return resutl;
+}
+
+void World::RemoveCreature(string pCreatureName)
+{
+	if (creatures.size() > 0)
+	{
+		int indexCreature = -1;
+		for (unsigned int i = 0; i < creatures.size(); i++)
+		{
+			if (creatures.at(i)->GetName() == pCreatureName)
+			{
+				indexCreature = i;
+			}
+		}
+
+		if (indexCreature != -1)
+		{
+			creatures.erase(creatures.begin() + indexCreature);
+		}
+	}
 }
 
 void World::StartGame()
@@ -218,7 +260,7 @@ void World::Event()
 	sec++;
 
 	if (sec % 5 == 0) {
-		Creature* creatureRandom = creatures[(rand() % (creatures.size()))];
+		Enemy* creatureRandom = creatures[(rand() % (creatures.size()))];
 
 		//Move creature random to a location random
 		creatureRandom->Go(LocationCommand[(rand() % (LocationCommand.size()))]);
@@ -228,10 +270,7 @@ void World::Event()
 		{
 			if (rand() % 2 == 1) 
 			{
-				int damage = creatureRandom->CalculateDamage();
-				player->TakeDamage(damage);
-				cout << "The " << creatureRandom->GetName() << " attacked you." << endl;
-				cout << "Hit: " << damage << " to YOU." << endl;
+				creatureRandom->Attack(player);
 			}
 		}
 	}
