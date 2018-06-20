@@ -18,6 +18,7 @@ public:
 	void AddLocation(string pDirection, Room* pRoom);
 	void AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem);
 	Room* GoTo(string pDirection, EntityType pEntityType);
+	Item* TakeItem(string pItem);
 	Item* GetItem(string pItem);
 	vector<Item*> GetItems();
 	void AddItem(Item* pItem);

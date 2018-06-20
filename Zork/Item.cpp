@@ -11,6 +11,13 @@ Item::Item(string pName, string pDescription)
 	type = COMMON;
 }
 
+Item::Item(string pName, string pDescription, ItemType pType)
+{
+	name = pName;
+	description = pDescription;
+	type = pType;
+}
+
 Item::Item(string pName, string pDescription, ItemType pType, int pAtk, int pDef)
 {
 	name = pName;
@@ -39,7 +46,37 @@ int Item::GetDef()
 	return def;
 }
 
+void Item::SetNote(string pNote)
+{
+	note = pNote;
+}
+
+Item * Item::GetItemInside()
+{
+	return itemInside;
+}
+
+void Item::PutItemInside(Item * pItem)
+{
+	itemInside = pItem;
+}
+
+string Item::GetNote()
+{
+	return note;
+}
+
 string Item::PrintStats()
 {
 	return name + " / atk:" + to_string(atk) + " def: " + to_string(def);
+}
+
+bool Item::IsPosibleToTake()
+{
+	return posibleToTake;
+}
+
+void Item::SetPosibleToTake(bool pPosibleToTake)
+{
+	posibleToTake = pPosibleToTake;
 }

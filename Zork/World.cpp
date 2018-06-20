@@ -22,7 +22,13 @@ World::World()
 	Item* map = new Item("MAP", "That the maps could interesting.");
 	Item* rock = new Item("ROCK", "A rock it's cover by leaves");
 	Item* key = new Item("KEY", "Yeah! I found the key.");
-	Item* computer = new Item("COMPUTER", "I really like that computer!");
+	Item* closet = new Item("CLOSET", "This closet has to contain something useful.", CONTAINER);
+	closet->SetPosibleToTake(false);
+	closet->PutItemInside(vest);
+
+	Item* computer = new Item("COMPUTER", "I really like that computer!",READABLE);
+	computer->SetPosibleToTake(false);
+	computer->SetNote("Where is it??? where is it?? Yeaaaah! I found it, my sister is in the lab A.");
 
 	bioTechParking->AddLocation(NORTH, reception);
 	bioTechParking->AddLocation(EAST, ambulance, true, rock);
@@ -43,12 +49,10 @@ World::World()
 	ambulance->AddItem(scalpel);
 	reception->AddItem(computer);
 	securityRoom->AddItem(key);
-	securityRoom->AddItem(vest);
+	securityRoom->AddItem(closet);
 	restRoom->AddItem(map);
 	restRoom->AddItem(tube);
-
-
-
+	
 	player = new Player("Daniel","The inmortal", bioTechParking, this, 35, 8);
 
 	Enemy* rat = new Enemy("RAT", "What is that... it's a infected rat?", restRoom, this, 10, 4);
@@ -212,6 +216,14 @@ void World::ManageCommand(string command)
 			else if (separatedCommands[0] == ATTACK)
 			{
 				player->Attack(separatedCommands[1]);
+			}
+			else if (separatedCommands[0] == READ)
+			{
+				player->Read(separatedCommands[1]);
+			}
+			else if (separatedCommands[0] == OPEN)
+			{
+				player->Open(separatedCommands[1]);
 			}
 			else
 			{

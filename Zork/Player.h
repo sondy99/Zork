@@ -19,6 +19,8 @@ public:
 	void Take(string pItem);
 	void Use(string pItem);
 	void Drop(string pItem);
+	void Open(string pItem);
+	void Read(string pItem);
 	void Look(bool pByCommand);
 	void PrintInventory();
 	void Attack(string pCreatureName);

@@ -88,7 +88,7 @@ Room* Room::GoTo(string pDirection, EntityType pEntityType)
 	return result;
 }
 
-Item* Room::GetItem(string pItem)
+Item* Room::TakeItem(string pItem)
 {
 
 	Item* result = nullptr;
@@ -99,14 +99,41 @@ Item* Room::GetItem(string pItem)
 		
 		if (items.at(i)->GetName() == pItem)
 		{
-			result = items.at(i);
+			if (items.at(i)->IsPosibleToTake())
+			{
+				result = items.at(i);
+			}
 			itemIdex = i;
 		}
 	}
 
-	if (itemIdex != -1)
+	if (itemIdex != -1 && items.at(itemIdex)->GetName() == pItem && !items.at(itemIdex)->IsPosibleToTake())
+	{
+		cout << "Is not possible to take this item." << endl;
+	}
+	else if(result == nullptr)
+	{
+		cout << "There is not item named like that." << endl;
+	}
+	else if (result != nullptr)
 	{
 		items.erase(items.begin() + itemIdex);
+	}
+
+	return result;
+}
+
+Item * Room::GetItem(string pItem)
+{
+	Item* result = nullptr;
+
+	for (unsigned int i = 0; i < items.size(); i++)
+	{
+		if (items.at(i)->GetName() == pItem)
+		{
+			result = items.at(i);
+			
+		}
 	}
 
 	return result;

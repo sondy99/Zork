@@ -35,14 +35,11 @@ void Player::Go(string pDirection)
 
 void Player::Take(string pItem)
 {
-	Item* item = currentLocation->GetItem(pItem);
+	Item* item = currentLocation->TakeItem(pItem);
 
 	if (item != nullptr)
 	{
 		Player::IntroduceItemInTheInventory(item);
-	}
-	else {
-		cout << "There is not item named like that." << endl;
 	}
 }
 
@@ -72,6 +69,64 @@ void Player::Drop(string pItem)
 		cout << item->GetName() << " dropped." << endl;
 	}
 
+}
+
+void Player::Open(string pItem)
+{
+	Item* item = nullptr;
+	bool itWasInTheInventory = false;
+
+	if (inventory.size() > 0)
+	{
+		for (unsigned int i = 0; i < inventory.size(); i++) {
+			if (inventory.at(i)->GetName() == pItem)
+			{
+				item = inventory.at(i)->GetItemInside();
+				itWasInTheInventory = true;
+			}
+		}
+	}
+
+	if (!itWasInTheInventory)
+	{
+		Item* auxItem = currentLocation->GetItem(pItem);
+
+		if (auxItem != nullptr)
+		{
+			item = auxItem->GetItemInside();
+		}
+	}
+
+	if (item != nullptr)
+	{
+		Player::IntroduceItemInTheInventory(item);
+	}
+}
+
+void Player::Read(string pItem)
+{
+	bool itWasInTheInventory = false;
+
+	if (inventory.size() > 0)
+	{
+		for (unsigned int i = 0; i < inventory.size(); i++) {
+			if (inventory.at(i)->GetName() == pItem)
+			{
+				cout << inventory.at(i)->GetNote() << endl;
+				itWasInTheInventory = true;
+			}
+		}
+	}
+
+	if (!itWasInTheInventory)
+	{
+		Item* auxItem = currentLocation->GetItem(pItem);
+
+		if (auxItem != nullptr)
+		{
+			cout << auxItem->GetNote() << endl;
+		}
+	}
 }
 
 void Player::Look(bool pByCommand)
