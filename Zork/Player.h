@@ -17,7 +17,7 @@ public:
 
 	void Go(string pDirection);
 	void Take(string pItem);
-	void Use(string pItem);
+	void Use(string pItem, string pDirection);
 	void Drop(string pItem);
 	void Open(string pItem);
 	void Read(string pItem);

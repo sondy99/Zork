@@ -22,6 +22,12 @@ World::World()
 	Item* map = new Item("MAP", "That the maps could interesting.");
 	Item* rock = new Item("ROCK", "A rock it's cover by leaves");
 	Item* key = new Item("KEY", "Yeah! I found the key.");
+	Item* sister = new Item("SISTER", "Finally I found you!! fast go with me, we have to leave, the car is outside waiting for us..");
+
+	Item* deadDoctor = new Item("DOCTOR", "It is the weird doctor, I bet all of this is his foul, Caroline told me he was making some dangerous experiments.");
+	deadDoctor->SetPosibleToTake(false);
+	deadDoctor->PutItemInside(key);
+
 	Item* closet = new Item("CLOSET", "This closet has to contain something useful.", CONTAINER);
 	closet->SetPosibleToTake(false);
 	closet->PutItemInside(vest);
@@ -32,31 +38,42 @@ World::World()
 
 	bioTechParking->AddLocation(NORTH, reception);
 	bioTechParking->AddLocation(EAST, ambulance, true, rock);
-	bioTechParking->AddLocation(SOUTH, car); //sister finish
+	bioTechParking->AddLocation(SOUTH, car, true, sister, "You can't go without your sister");
 
 	car->AddLocation(NORTH, bioTechParking);
 
 	ambulance->AddLocation(WEST, bioTechParking);
 
+	reception->AddLocation(SOUTH, bioTechParking);
 	reception->AddLocation(NORTH, hallWay);
 	reception->AddLocation(EAST, securityRoom);
 	reception->AddLocation(WEST, restRoom);
 
+	securityRoom->AddLocation(WEST, reception);
+
+	restRoom->AddLocation(EAST, reception);
+
+	hallWay->AddLocation(SOUTH, reception);
 	hallWay->AddLocation(EAST, labA, true, key);
-	hallWay->AddLocation(EAST, labB, true, key);
+	hallWay->AddLocation(WEST, labB);
+
+	labA->AddLocation(WEST, hallWay);
+
+	labB->AddLocation(EAST, hallWay);
 
 	bioTechParking->AddItem(rock);
 	ambulance->AddItem(scalpel);
 	reception->AddItem(computer);
-	securityRoom->AddItem(key);
+	securityRoom->AddItem(deadDoctor);
 	securityRoom->AddItem(closet);
 	restRoom->AddItem(map);
 	restRoom->AddItem(tube);
+	labA->AddItem(sister);
 	
 	player = new Player("Daniel","The inmortal", bioTechParking, this, 35, 8);
 
 	Enemy* rat = new Enemy("RAT", "What is that... it's a infected rat?", restRoom, this, 10, 4);
-	Enemy* zombie = new Enemy("ZOMBIE", "WTF! what is this!? doctor are you ok? ohhh nooo!! stop!", labB, this, 25, 6);
+	Enemy* zombie = new Enemy("ZOMBIE", "WTF! what is this!? doctor are you ok?", labB, this, 25, 6);
 
 	creatures.push_back(rat);
 	creatures.push_back(zombie);
@@ -134,6 +151,7 @@ void World::StartGame()
 
 		if (player->IsAlive())
 		{
+			cout << endl;
 			ManageCommand(commandByUser);
 			cout << endl;
 		}
@@ -187,7 +205,7 @@ void World::ManageCommand(string command)
 			}
 			else
 			{
-				cout << "Command unknown" << endl;
+				cout << "Unknown command." << endl;
 			}
 			break;
 		}
@@ -196,10 +214,6 @@ void World::ManageCommand(string command)
 			if (separatedCommands[0] == TAKE)
 			{
 				player->Take(separatedCommands[1]);
-			}
-			else if (separatedCommands[0] == USE)
-			{
-				player->Use(separatedCommands[1]);
 			}
 			else if (separatedCommands[0] == DROP)
 			{
@@ -221,13 +235,21 @@ void World::ManageCommand(string command)
 			{
 				player->Read(separatedCommands[1]);
 			}
-			else if (separatedCommands[0] == OPEN)
+			else if (separatedCommands[0] == OPEN || separatedCommands[0] == LOOT)
 			{
 				player->Open(separatedCommands[1]);
 			}
 			else
 			{
 				cout << "Command unknown" << endl;
+			}
+			break;
+		}
+		case 3:
+		{
+			if (separatedCommands[0] == USE)
+			{
+				player->Use(separatedCommands[1], separatedCommands[2]);
 			}
 			break;
 		}
@@ -270,17 +292,20 @@ void World::Event()
 	sec++;
 
 	if (sec % 5 == 0) {
-		Enemy* creatureRandom = creatures[(rand() % (creatures.size()))];
-
-		//Move creature random to a location random
-		creatureRandom->Go(LocationCommand[(rand() % (LocationCommand.size()))]);
-
-		//Creature attack randomly to the player
-		if (creatureRandom->GetCurrenLocation()->GetName() == player->GetCurrenLocation()->GetName()) 
+		if (creatures.size() != 0)
 		{
-			if (rand() % 2 == 1) 
+			Enemy* creatureRandom = creatures[(rand() % (creatures.size()))];
+
+			//Move creature random to a location random
+			creatureRandom->Go(LocationCommand[(rand() % (LocationCommand.size()))]);
+
+			//Creature attack randomly to the player
+			if (creatureRandom->GetCurrenLocation()->GetName() == player->GetCurrenLocation()->GetName())
 			{
-				creatureRandom->Attack(player);
+				if (rand() % 2 == 1)
+				{
+					creatureRandom->Attack(player);
+				}
 			}
 		}
 	}

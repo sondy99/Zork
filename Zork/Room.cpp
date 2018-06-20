@@ -41,12 +41,13 @@ void Room::AddLocation(string pDirection, Room* pRoom)
 	locations.push_back(location);
 }
 
-void Room::AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem)
+void Room::AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem, string pMessage)
 {
 	Location location;
 	location.direction = pDirection;
 	location.room = pRoom;
 	location.locked = pLocked;
+	location.message = pMessage;
 
 	if (pLocked && pItem != nullptr)
 	{
@@ -73,7 +74,8 @@ Room* Room::GoTo(string pDirection, EntityType pEntityType)
 			{
 				if (pEntityType == PLAYER)
 				{
-					cout << "The door is locked." << endl;
+					string message = locations[i].message == "" ? "The door is locked." : locations[i].message;
+					cout << message << endl;
 				}
 				locked = true;
 			}
@@ -154,12 +156,12 @@ void Room::DropItem(Item * pItem)
 	items.push_back(pItem);
 }
 
-void Room::UseItem(string pItem)
+void Room::UseItem(string pItem, string pDirection)
 {
 	bool usedItem = false;
 	for (unsigned int i = 0; i < locations.size(); i++)
 	{
-		if (locations[i].item != nullptr && locations[i].item->GetName() == pItem)
+		if (locations[i].item != nullptr && locations[i].item->GetName() == pItem && locations[i].direction == pDirection)
 		{
 			locations[i].locked = !locations[i].locked;
 			cout << pItem << " was used on " << locations[i].direction << endl;
@@ -168,7 +170,7 @@ void Room::UseItem(string pItem)
 		}
 	}
 
-	if(!usedItem)
+	if (!usedItem)
 	{
 		cout << pItem << " is not useful here." << endl;
 	}

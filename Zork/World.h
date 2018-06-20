@@ -36,6 +36,7 @@ static const string EXIT_GAME = "EXIT";
 static const string TIME = "TIME";
 static const string READ = "READ";
 static const string OPEN = "OPEN";
+static const string LOOT = "LOOT";
 
 class World
 {

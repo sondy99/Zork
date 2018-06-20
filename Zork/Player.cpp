@@ -43,9 +43,9 @@ void Player::Take(string pItem)
 	}
 }
 
-void Player::Use(string pItem)
+void Player::Use(string pItem, string pDirection)
 {
-	currentLocation->UseItem(pItem);
+	currentLocation->UseItem(pItem, pDirection);
 }
 
 void Player::Drop(string pItem)
@@ -135,7 +135,7 @@ void Player::Look(bool pByCommand)
 
 	if (!currentLocation->IsAlreadyBeenHere() || pByCommand)
 	{
-		cout << currentLocation->GetDescription(pByCommand) << endl;
+		cout << currentLocation->GetDescription(pByCommand) << endl << endl;
 	}
 
 	vector<Enemy*> creatures = world->GetEnemies();
@@ -144,7 +144,7 @@ void Player::Look(bool pByCommand)
 		for (unsigned int i = 0; i < creatures.size(); i++) {
 			if (creatures.at(i)->GetCurrenLocation()->GetName() == currentLocation->GetName())
 			{
-				cout << creatures.at(i)->GetDescription() << endl;
+				cout << creatures.at(i)->GetDescription() << endl << endl;
 			}
 		}
 	}
@@ -153,7 +153,7 @@ void Player::Look(bool pByCommand)
 	if (items.size() > 0)
 	{
 		for (unsigned int i = 0; i < items.size(); i++) {
-			cout << items.at(i)->GetDescription() << endl;
+			cout << items.at(i)->GetDescription() << endl << endl;
 		}
 	}
 }
