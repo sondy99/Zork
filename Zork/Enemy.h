@@ -10,7 +10,7 @@ class Enemy : public Creature
 {
 public:
 	Enemy();
-	Enemy(string pName, Room* pActualLocation, World* pWorld, int pHitpoints, string pDescription, int pMaxHit = 1);
+	Enemy(string pName, string pDescription, Room* pActualLocation, World* pWorld, int pHitpoints, int pMaxHit = 1);
 	~Enemy();
 
 	void Go(string pDirection);

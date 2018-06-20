@@ -8,7 +8,7 @@ Player::Player()
 {
 }
 
-Player::Player(string pName, Room* pActualLocation, World* pWorld, int pHitpoints, int pMaxHit)
+Player::Player(string pName, string pDescription, Room * pActualLocation, World * pWorld, int pHitpoints, int pMaxHit)
 {
 	name = pName;
 	currentLocation = pActualLocation;
@@ -29,7 +29,7 @@ void Player::Go(string pDirection)
 	if (newLocation != nullptr)
 	{
 		currentLocation = newLocation;
-		Player::Look();
+		Player::Look(false);
 	}
 }
 
@@ -74,10 +74,14 @@ void Player::Drop(string pItem)
 
 }
 
-void Player::Look()
+void Player::Look(bool pByCommand)
 {
 	cout << currentLocation->GetName() << endl;
-	cout << currentLocation->GetDescription() << endl;
+
+	if (!currentLocation->IsAlreadyBeenHere() || pByCommand)
+	{
+		cout << currentLocation->GetDescription(pByCommand) << endl;
+	}
 
 	vector<Enemy*> creatures = world->GetEnemies();
 	if (creatures.size() > 0)

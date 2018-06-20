@@ -7,7 +7,7 @@ Enemy::Enemy()
 {
 }
 
-Enemy::Enemy(string pName, Room * pActualLocation, World * pWorld, int pHitpoints, string pDescription, int pMaxHit)
+Enemy::Enemy(string pName, string pDescription, Room * pActualLocation, World * pWorld, int pHitpoints, int pMaxHit)
 {
 	name = pName;
 	currentLocation = pActualLocation;
@@ -17,7 +17,6 @@ Enemy::Enemy(string pName, Room * pActualLocation, World * pWorld, int pHitpoint
 	maxHit = pMaxHit;
 	entityType = ENEMY;
 }
-
 
 Enemy::~Enemy()
 {

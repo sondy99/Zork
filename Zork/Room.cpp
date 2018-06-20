@@ -15,6 +15,23 @@ Room::~Room()
 {
 }
 
+string Room::GetDescription(bool forced)
+{
+	string result = "";
+
+	if (!alreadyBeenHere || forced)
+	{
+		result = description;
+		alreadyBeenHere = true;
+	}
+
+	return result;
+}
+
+bool Room::IsAlreadyBeenHere(){
+	return alreadyBeenHere;
+}
+
 void Room::AddLocation(string pDirection, Room* pRoom)
 {
 	Location location;

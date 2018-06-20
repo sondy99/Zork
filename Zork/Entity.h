@@ -32,7 +32,7 @@ public:
 	string GetName();
 	World* GetWorld();
 	void PrintName();
-	string GetDescription();
+	virtual string GetDescription();
 	void PrintDescription();
 
 protected:

@@ -13,6 +13,8 @@ public:
 	Room(string pName, string pDescription);
 	~Room();
 
+	string GetDescription(bool forced);
+	bool IsAlreadyBeenHere();
 	void AddLocation(string pDirection, Room* pRoom);
 	void AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem);
 	Room* GoTo(string pDirection, EntityType pEntityType);
@@ -33,6 +35,7 @@ private:
 	vector<Location> locations;
 	vector<Item*> items;
 	vector<Creature*> creatures;
+	bool alreadyBeenHere = false;
 };
 
 #endif //__Room__
