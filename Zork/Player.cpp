@@ -197,7 +197,7 @@ void Player::Attack(string pCreatureName)
 	}
 	else
 	{
-		cout << "There is no creature like that." << endl;
+		cout << "There is no creature named like that." << endl;
 	}
 }
 

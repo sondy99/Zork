@@ -51,12 +51,14 @@ void Item::SetNote(string pNote)
 	note = pNote;
 }
 
-Item * Item::GetItemInside()
+Item* Item::GetItemInside()
 {
-	return itemInside;
+	Item* resutl = itemInside;
+	itemInside = nullptr;
+	return resutl;
 }
 
-void Item::PutItemInside(Item * pItem)
+void Item::PutItemInside(Item* pItem)
 {
 	itemInside = pItem;
 }

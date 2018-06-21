@@ -115,7 +115,7 @@ Item* Room::TakeItem(string pItem)
 	}
 	else if(result == nullptr)
 	{
-		cout << "There is not item named like that." << endl;
+		cout << "There is no item named like that " << pItem  << "."<< endl;
 	}
 	else if (result != nullptr)
 	{

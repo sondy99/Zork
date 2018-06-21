@@ -3,28 +3,31 @@
 
 World::World()
 {
-	Room* bioTechParking = new Room("Biotechnology lab parking.", "This parking seems to be abandoned, actually every looks like that, there is only the biotechnology lab where my sister is trapped in the north, an ambulance and my car."); //piedra para abrir la ambulancia
+	Room* bioTechParking = new Room("Biotechnology lab parking.", "This parking seems to be abandoned, actually everything looks like that, there is only the biotechnology lab where my sister is trapped in the north, an ambulance and my car."); 
 	Room* car = new Room("My car.", "Finally, this craziness, it's over, let's go home, mom is waiting for us.");
-	Room* ambulance = new Room("Ambulance.", "Oh my god! I don't know what I'm going to need, let me take a look and see what can be useful.."); //bisturi (arma)
-	Room* reception = new Room("Reception.", "There's no one here, I have to find my sister right now, she told me she's stuck in her lab, but which one is it? I can see two hallways and one elevator."); //computadora para ser leida donde esta mi hermana
-	Room* securityRoom = new Room("Security room.", "Jesus! what it's going on here, there are two dead bodies, one of them is a doctor, or what it left of him. There is also a closet.");// llave dentro del doctor, y chaleco en el closet
-	Room* restRoom = new Room("Rest room.", "It's weird where is everyone? where is my sister?.");  //map y un tubo
+	Room* ambulance = new Room("Ambulance.", "Oh my god! I don't know what I'm going to need, let me take a look and see what can be useful..");
+	Room* reception = new Room("Reception.", "There is no one here, I have to find my sister right now, she told me she's stuck in her lab, but which one is it? I can see two hallways and one elevator."); 
+	Room* securityRoom = new Room("Security room.", "Jesus! what it's going on here, there are two dead bodies, one of them is a doctor, or what it left of him. There is also a closet.");
+	Room* restRoom = new Room("Rest room.", "This is weird where is everyone? where is my sister?.");  
 	Room* hallWay = new Room("Hallway.", "Ok! I'm close I have to be careful, I don't know what I can found here. There are two labs in here, the lab A to the east  and the lab B to the west.");
-	Room* labA = new Room("Lab A.", "This is the biggest fancy lab I've ever seen before."); //Hermana
-	Room* labB = new Room("Lab B.", "Crap, there was a massacre here!"); //zoombi cabilla
+	Room* labA = new Room("Lab A.", "This is the biggest, fancy lab I've ever seen before."); 
+	Room* labB = new Room("Lab B.", "Crap, there was a massacre here!"); 
 
 	//weapons and armor
 	Item* vest = new Item("VEST", "This vest could be useful to have some protection here.", ARMOUR, 0, 2);
-	Item* tube = new Item("TUBE", "Haha! I like this tune, I can smash whoever wants to hurt my sister..", WEAPON, 4, 1);
+	Item* tube = new Item("TUBE", "Haha! I like this tube, I can smash whoever wants to hurt my sister..", WEAPON, 4, 1);
 	Item* scalpel = new Item("SCALPEL", "Oh, this scalpel, it's really sharp.", WEAPON, 5, 0);
 
 	//common items
-	Item* map = new Item("MAP", "That the maps could interesting.");
 	Item* rock = new Item("ROCK", "A rock it's cover by leaves");
 	Item* key = new Item("KEY", "Yeah! I found the key.");
-	Item* sister = new Item("SISTER", "Finally I found you!! fast go with me, we have to leave, the car is outside waiting for us..");
+	Item* sister = new Item("SISTER", "Finally, I found you!! fast go with me, we have to leave, the car is outside waiting for us..");
 
-	Item* deadDoctor = new Item("DOCTOR", "It is the weird doctor, I bet all of this is his foul, Caroline told me he was making some dangerous experiments.");
+	Item* map = new Item("MAP", "That map could be interesting.");
+	map->SetPosibleToTake(false);
+	map->SetNote("Ok, in the north of the Reception is the hallway and there are two labs, lab A to the east and lab B to the west.");
+
+	Item* deadDoctor = new Item("DOCTOR", "It is the weird doctor, I bet all of this is his foul, Caroline told me he was doing some dangerous experiments.");
 	deadDoctor->SetPosibleToTake(false);
 	deadDoctor->PutItemInside(key);
 
@@ -34,7 +37,7 @@ World::World()
 
 	Item* computer = new Item("COMPUTER", "I really like that computer!",READABLE);
 	computer->SetPosibleToTake(false);
-	computer->SetNote("Where is it??? where is it?? Yeaaaah! I found it, my sister is in the lab A.");
+	computer->SetNote("Where is she??? where is she?? Yeaaaah! I found her, my sister is in the lab A.");
 
 	bioTechParking->AddLocation(NORTH, reception);
 	bioTechParking->AddLocation(EAST, ambulance, true, rock);
@@ -72,7 +75,7 @@ World::World()
 	
 	player = new Player("Daniel","The inmortal", bioTechParking, this, 35, 8);
 
-	Enemy* rat = new Enemy("RAT", "What is that... it's a infected rat?", restRoom, this, 10, 4);
+	Enemy* rat = new Enemy("RAT", "What is that... it's an infected rat?", restRoom, this, 10, 4);
 	Enemy* zombie = new Enemy("ZOMBIE", "WTF! what is this!? doctor are you ok?", labB, this, 25, 6);
 
 	creatures.push_back(rat);
@@ -100,7 +103,7 @@ vector<Enemy*> World::GetEnemies()
 	return creatures;
 }
 
-Enemy * World::GetEnemy(string pEnemyName)
+Enemy* World::GetEnemy(string pEnemyName)
 {
 	Enemy* resutl = nullptr;
 
@@ -241,7 +244,7 @@ void World::ManageCommand(string command)
 			}
 			else
 			{
-				cout << "Command unknown" << endl;
+				cout << "Unknown command." << endl;
 			}
 			break;
 		}
@@ -255,7 +258,7 @@ void World::ManageCommand(string command)
 		}
 		default:
 		{
-			cout << "Command unknown" << endl;
+			cout << "Unknown command." << endl;
 			break;
 		}
 	}
@@ -304,7 +307,9 @@ void World::Event()
 			{
 				if (rand() % 2 == 1)
 				{
-					creatureRandom->Attack(player);
+					if (player->IsAlive()) {
+						creatureRandom->Attack(player);
+					}
 				}
 			}
 		}
