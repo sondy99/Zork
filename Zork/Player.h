@@ -24,9 +24,10 @@ public:
 	void Look(bool pByCommand);
 	void PrintInventory();
 	void Attack(string pCreatureName);
-
+	void SetWin(bool pWin);
+	bool GetWin();
 private:
-
+	bool win = false;
 };
 
 #endif //__Player__

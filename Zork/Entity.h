@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <map>
 #include <vector>
 #include <stdlib.h>
 
@@ -19,7 +20,8 @@ enum EntityType
 	ITEM,
 	CREATURE,
 	ENEMY,
-	PLAYER
+	PLAYER,
+	NPC
 };
 
 class Entity

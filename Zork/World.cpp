@@ -4,7 +4,7 @@
 World::World()
 {
 	Room* bioTechParking = new Room("Biotechnology lab parking.", "This parking seems to be abandoned, actually everything looks like that, there is only the biotechnology lab where my sister is trapped in the north, an ambulance and my car."); 
-	Room* car = new Room("My car.", "Finally, this craziness, it's over, let's go home, mom is waiting for us.");
+	Room* car = new Room("My car.", "Finally, this craziness, it's over, let's go home, mom is waiting for us.", true);
 	Room* ambulance = new Room("Ambulance.", "Oh my god! I don't know what I'm going to need, let me take a look and see what can be useful..");
 	Room* reception = new Room("Reception.", "There is no one here, I have to find my sister right now, she told me she's stuck in her lab, but which one is it? I can see two hallways and one elevator."); 
 	Room* securityRoom = new Room("Security room.", "Jesus! what it's going on here, there are two dead bodies, one of them is a doctor, or what it left of him. There is also a closet.");
@@ -21,11 +21,10 @@ World::World()
 	//common items
 	Item* rock = new Item("ROCK", "A rock it's cover by leaves");
 	Item* key = new Item("KEY", "Yeah! I found the key.");
-	Item* sister = new Item("SISTER", "Finally, I found you!! fast go with me, we have to leave, the car is outside waiting for us..");
 
-	Item* map = new Item("MAP", "That map could be interesting.");
-	map->SetPosibleToTake(false);
-	map->SetNote("Ok, in the north of the Reception is the hallway and there are two labs, lab A to the east and lab B to the west.");
+	Item* mapOnTheWall = new Item("MAP", "That map could be interesting.");
+	mapOnTheWall->SetPosibleToTake(false);
+	mapOnTheWall->SetNote("Ok, in the north of the Reception is the hallway and there are two labs, lab A to the east and lab B to the west.");
 
 	Item* deadDoctor = new Item("DOCTOR", "It is the weird doctor, I bet all of this is his foul, Caroline told me he was doing some dangerous experiments.");
 	deadDoctor->SetPosibleToTake(false);
@@ -41,7 +40,7 @@ World::World()
 
 	bioTechParking->AddLocation(NORTH, reception);
 	bioTechParking->AddLocation(EAST, ambulance, true, rock);
-	bioTechParking->AddLocation(SOUTH, car, true, sister, "You can't go without your sister");
+	bioTechParking->AddLocation(SOUTH, car, true, "You can't go without your sister");
 
 	car->AddLocation(NORTH, bioTechParking);
 
@@ -69,17 +68,25 @@ World::World()
 	reception->AddItem(computer);
 	securityRoom->AddItem(deadDoctor);
 	securityRoom->AddItem(closet);
-	restRoom->AddItem(map);
+	restRoom->AddItem(mapOnTheWall);
 	restRoom->AddItem(tube);
-	labA->AddItem(sister);
 	
-	player = new Player("Daniel","The inmortal", bioTechParking, this, 35, 8);
+	player = new Player("Daniel","The inmortal", bioTechParking, this, 35, 4);
 
-	Enemy* rat = new Enemy("RAT", "What is that... it's an infected rat?", restRoom, this, 10, 4);
-	Enemy* zombie = new Enemy("ZOMBIE", "WTF! what is this!? doctor are you ok?", labB, this, 25, 6);
+	Enemy* rat = new Enemy("RAT", "What is that... it's an infected rat?", restRoom, this, 15, 3);
+	Enemy* zombie = new Enemy("DOCTOR", "WTF! what is this!? doctor are you ok?", labB, this, 40, 8);
 
 	creatures.push_back(rat);
 	creatures.push_back(zombie);
+
+	Npc* sister = new Npc("SISTER", "Finally, I found you!! fast go with me, we have to leave, the car is outside waiting for us..", labA, this);
+
+	map<string, string> dialogue;
+	dialogue.insert(pair<string, string>("HI", "Finally you are here."));
+	dialogue.insert(pair<string, string>("GO", "Ok, perfect let's go."));
+	sister->SetDialogue(dialogue);
+
+	npcs.push_back(sister);
 
 	player->Look(true);
 	cout << endl;
@@ -88,8 +95,6 @@ World::World()
 	LocationCommand.push_back(SOUTH);
 	LocationCommand.push_back(WEST);
 	LocationCommand.push_back(EAST);
-	LocationCommand.push_back(UP);
-	LocationCommand.push_back(DOWN);
 
 	World::RecurrentEvents([&] {World::Event(); }, 1000);
 }
@@ -141,46 +146,115 @@ void World::RemoveCreature(string pCreatureName)
 	}
 }
 
+vector<Npc*> World::GetNpcs()
+{
+	return npcs;
+}
+
+Npc* World::GetNpc(string pNpcName)
+{
+	Npc* resutl = nullptr;
+
+	if (npcs.size() > 0)
+	{
+		for (unsigned int i = 0; i < npcs.size(); i++)
+		{
+			if (npcs.at(i)->GetName() == pNpcName)
+			{
+				resutl = npcs.at(i);
+			}
+		}
+	}
+
+	return resutl;
+}
+
+void World::RemoveNpc(string pNpcName)
+{
+	if (npcs.size() > 0)
+	{
+		int indexNpc = -1;
+		for (unsigned int i = 0; i < npcs.size(); i++)
+		{
+			if (npcs.at(i)->GetName() == pNpcName)
+			{
+				indexNpc = i;
+			}
+		}
+
+		if (indexNpc != -1)
+		{
+			npcs.erase(npcs.begin() + indexNpc);
+		}
+	}
+}
+
 void World::StartGame()
 {
-	bool gameOver = false;
 	while (!gameOver)
 	{
 		string commandByUser;
 
 		getline(cin, commandByUser);
-
+		
 		transform(commandByUser.begin(), commandByUser.end(), commandByUser.begin(), ::toupper);
 
-		if (player->IsAlive())
+		if (!gameOver)
 		{
-			cout << endl;
-			ManageCommand(commandByUser);
-			cout << endl;
-		}
-		else
-		{
-			commandByUser = EXIT_GAME;
-			cout << "You are dead." << endl;
-		}
+			if (player->IsAlive())
+			{
 
-		if (commandByUser == EXIT_GAME)
-		{
-			//todo Imprimir stats de game over
-			gameOver = true;
+				cout << endl;
+				if (!isInConversation)
+				{
+					ManageCommand(commandByUser);
+				}
+				else
+				{
+					World::ProcessConversation(commandByUser);
+				}
+				cout << endl;
+			}
+			else
+			{
+				commandByUser = EXIT_GAME;
+				cout << "You are dead." << endl;
+			}
+
+			if (commandByUser == EXIT_GAME)
+			{
+				gameOver = true;
+			}
 		}
 	}
 }
 
+void World::PrintHelp()
+{
+	cout << "This is the list of commands and how to use them (The command could be use on upper or lower case):" << endl;
+	cout << "NORTH/SOUTH/EAST/WEST -> To navigate through the world." << endl;
+	cout << "INVENTORY -> Show you your current inventory." << endl;
+	cout << "STATS -> Show you your stats (HP, Atk, Def, weapons, armor)." << endl;
+	cout << "LOOK -> Take a look at the current location." << endl;
+	cout << "EXIT_GAME -> Equit from the game." << endl;
+	cout << "TIME -> Print the seconds in the game." << endl;
+	cout << "TAKE <item name> -> Take an item from the room." << endl;
+	cout << "USER <item name> <direction> (NORTH/SOUTH/EAST/WEST) > -> Open closed gates." << endl;
+	cout << "DROP <item name> -> Drop items from your inventory." << endl;
+	cout << "EQUIP <item name> -> Equip items from your inventory, you can have two weapons and one armor." << endl;
+	cout << "UNEQUIP <item name> -> unique items from you." << endl;
+	cout << "READ <item> -> Read items if there are readable." << endl;
+	cout << "OPEN <item> -> Open items and take the items inside if the item is a container." << endl;
+	cout << "LOOT <item> -> LOOT items and take the items inside if the item is a container." << endl;
+	cout << "HI <npcName> -> Starts a conversation with an NPC." << endl;
+	cout << "BYE -> Ends a conversation with an NPC." << endl;
+	cout << "GO -> Tells your sister to go and she is going with you." << endl;
+
+}
+
 void World::ManageCommand(string command)
 {
-	string buf;
-	stringstream ss(command);
-
-	vector<string> separatedCommands;
-
-	while (ss >> buf)
-		separatedCommands.push_back(buf);
+	vector<string> separatedCommands = World::StringToVectorString(command);
 
 	switch (separatedCommands.size())
 	{
@@ -205,6 +279,10 @@ void World::ManageCommand(string command)
 			else if (separatedCommands[0] == TIME)
 			{
 				cout << "Time:" << sec << " sec." << endl;
+			}
+			else if (separatedCommands[0] == HELP)
+			{
+				World::PrintHelp();
 			}
 			else
 			{
@@ -242,6 +320,11 @@ void World::ManageCommand(string command)
 			{
 				player->Open(separatedCommands[1]);
 			}
+			else if (separatedCommands[0] == HI)
+			{
+				World::StartConversation(separatedCommands[1]);
+				World::ProcessConversation(command);
+			}
 			else
 			{
 				cout << "Unknown command." << endl;
@@ -263,6 +346,64 @@ void World::ManageCommand(string command)
 		}
 	}
 
+}
+
+void World::ProcessConversation(string words)
+{
+	if (npcInConversation != nullptr) {
+		vector<string> separatedWords = World::StringToVectorString(words);
+
+
+		if (separatedWords.size() == 1)
+		{
+			if (separatedWords[0] == BYE)
+			{
+				npcInConversation = nullptr;
+				isInConversation = false;
+			}
+		}
+
+		npcInConversation->ProcessDialogue(words);
+	}
+}
+
+void World::StartConversation(string pNpcName)
+{
+	npcInConversation = World::GetNpc(pNpcName);
+
+	if (npcInConversation != nullptr && npcInConversation->GetCurrenLocation()->GetName() == player->GetCurrenLocation()->GetName())
+	{
+		isInConversation = true;
+	}
+
+}
+
+
+vector<string> World::StringToVectorString(string words)
+{
+	string buf;
+	stringstream ss(words);
+
+	vector<string> separatedCommands;
+
+	while (ss >> buf)
+		separatedCommands.push_back(buf);
+
+	return separatedCommands;
+}
+
+
+void World::WinGame()
+{
+	RemoveNpc(npcInConversation->GetName());
+	npcInConversation = nullptr;
+	isInConversation = false;
+	player->SetWin(true);
+}
+
+void World::GameOver()
+{
+	gameOver = true;
 }
 
 bool World::IsLocationCommand(string command)

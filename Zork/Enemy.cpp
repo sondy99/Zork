@@ -24,7 +24,7 @@ Enemy::~Enemy()
 
 void Enemy::Go(string pDirection)
 {
-	Room* newLocation = currentLocation->GoTo(pDirection, entityType);
+	Room* newLocation = currentLocation->GoTo(pDirection, entityType, false);
 
 	if (newLocation != nullptr)
 	{

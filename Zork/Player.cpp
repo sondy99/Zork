@@ -24,12 +24,17 @@ Player::~Player()
 
 void Player::Go(string pDirection)
 {
-	Room* newLocation = currentLocation->GoTo(pDirection, entityType);
+	Room* newLocation = currentLocation->GoTo(pDirection, entityType, win);
 
 	if (newLocation != nullptr)
 	{
 		currentLocation = newLocation;
 		Player::Look(false);
+
+		if(newLocation->GetFinalRoom())
+		{
+			world->GameOver();
+		}
 	}
 }
 
@@ -138,6 +143,15 @@ void Player::Look(bool pByCommand)
 		cout << currentLocation->GetDescription(pByCommand) << endl << endl;
 	}
 
+
+	vector<Item*> items = currentLocation->GetItems();
+	if (items.size() > 0)
+	{
+		for (unsigned int i = 0; i < items.size(); i++) {
+			cout << items.at(i)->GetDescription() << endl << endl;
+		}
+	}
+
 	vector<Enemy*> creatures = world->GetEnemies();
 	if (creatures.size() > 0)
 	{
@@ -149,11 +163,14 @@ void Player::Look(bool pByCommand)
 		}
 	}
 
-	vector<Item*> items = currentLocation->GetItems();
-	if (items.size() > 0)
+	vector<Npc*> npcs = world->GetNpcs();
+	if (npcs.size() > 0)
 	{
-		for (unsigned int i = 0; i < items.size(); i++) {
-			cout << items.at(i)->GetDescription() << endl << endl;
+		for (unsigned int i = 0; i < npcs.size(); i++) {
+			if (npcs.at(i)->GetCurrenLocation()->GetName() == currentLocation->GetName())
+			{
+				cout << npcs.at(i)->GetDescription() << endl;
+			}
 		}
 	}
 }
@@ -163,7 +180,7 @@ void Player::PrintInventory()
 	if (inventory.size() > 0)
 	{
 		for (unsigned int i = 0; i < inventory.size(); i++) {
-			cout << inventory.at(i)->GetName() << " / " << inventory.at(i)->GetDescription() << endl;
+			cout << inventory.at(i)->GetName() << " / " << inventory.at(i)->GetDescription() << " / Atk: " << inventory.at(i)->GetAtk() << " Def: " << inventory.at(i)->GetDef() << endl;
 		}
 	}
 	else 
@@ -191,6 +208,7 @@ void Player::Attack(string pCreatureName)
 		else
 		{
 			int returnDamage = target->CalculateDamage() - def;
+			returnDamage = returnDamage >= 0 ? returnDamage : 0;
 			hitpoints -= returnDamage;
 			cout << "Hit: " << returnDamage << " to YOU." << endl;
 		}
@@ -199,5 +217,15 @@ void Player::Attack(string pCreatureName)
 	{
 		cout << "There is no creature named like that." << endl;
 	}
+}
+
+void Player::SetWin(bool pWin)
+{
+	win = pWin;
+}
+
+bool Player::GetWin()
+{
+	return win;
 }
 

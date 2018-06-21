@@ -16,33 +16,40 @@ void Creature::Equip(string pItemName)
 
 	if (item != nullptr)
 	{
-		bool equipped = false;
+		if (item->GetItemType() == WEAPON || item->GetItemType() == ARMOUR)
+		{
+			bool equipped = false;
 
-		if (rightHand == nullptr && item->GetItemType() == WEAPON)
-		{
-			rightHand = item;
-			equipped = true;
-		}
-		else if (leftHand == nullptr && item->GetItemType() == WEAPON)
-		{
-			leftHand = item;
-			equipped = true;
-		}
-		else if (armor == nullptr && item->GetItemType() == ARMOUR)
-		{
-			armor = item;
-			equipped = true;
-		}
+			if (rightHand == nullptr && item->GetItemType() == WEAPON)
+			{
+				rightHand = item;
+				equipped = true;
+			}
+			else if (leftHand == nullptr && item->GetItemType() == WEAPON)
+			{
+				leftHand = item;
+				equipped = true;
+			}
+			else if (armor == nullptr && item->GetItemType() == ARMOUR)
+			{
+				armor = item;
+				equipped = true;
+			}
 
 
-		if (equipped)
-		{
-			cout << item->GetName() + " equipped." << endl;
-			Creature::RemoveItemFromInventory(item);
+			if (equipped)
+			{
+				cout << item->GetName() + " equipped." << endl;
+				Creature::RemoveItemFromInventory(item);
+			}
+			else
+			{
+				cout << "You already have an item equipped." << endl;
+			}
 		}
 		else
 		{
-			cout << "You already have an item equipped." << endl;
+			cout << "You can only equip armors and weapons." << endl;
 		}
 	}
 	else 

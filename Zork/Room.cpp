@@ -11,6 +11,12 @@ Room::Room(string pName, string pDescription)
 	description = pDescription;
 }
 
+Room::Room(string pName, string pDescription, bool pFinalRoom)
+{
+	name = pName;
+	description = pDescription;
+	finalRoom = pFinalRoom;
+}
 Room::~Room()
 {
 }
@@ -57,7 +63,18 @@ void Room::AddLocation(string pDirection, Room* pRoom, bool pLocked, Item* pItem
 	locations.push_back(location);
 }
 
-Room* Room::GoTo(string pDirection, EntityType pEntityType)
+void Room::AddLocation(string pDirection, Room* pRoom, bool pLocked, string pMessage)
+{
+	Location location;
+	location.direction = pDirection;
+	location.room = pRoom;
+	location.locked = pLocked;
+	location.message = pMessage;
+
+	locations.push_back(location);
+}
+
+Room* Room::GoTo(string pDirection, EntityType pEntityType, bool pWwin)
 {
 	Room* result = nullptr;
 	bool locked = false;
@@ -66,7 +83,7 @@ Room* Room::GoTo(string pDirection, EntityType pEntityType)
 	{
 		if (locations[i].direction == pDirection)
 		{
-			if (!locations[i].locked)
+			if ((!locations[i].locked && !locations[i].room->GetFinalRoom())  || (locations[i].room->GetFinalRoom() && pWwin))
 			{
 				result = locations[i].room;
 			}
@@ -174,4 +191,9 @@ void Room::UseItem(string pItem, string pDirection)
 	{
 		cout << pItem << " is not useful here." << endl;
 	}
+}
+
+bool Room::GetFinalRoom()
+{
+	return finalRoom;
 }
