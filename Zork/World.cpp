@@ -231,7 +231,7 @@ void World::StartGame()
 
 void World::PrintHelp()
 {
-	cout << "This is the list of commands and how to use them (The command could be use on upper or lower case):" << endl;
+	cout << "This is the list of commands and how to use them (The command could be use on upper or lower case)." << endl;
 	cout << "NORTH/SOUTH/EAST/WEST -> To navigate through the world." << endl;
 	cout << "INVENTORY -> Show you your current inventory." << endl;
 	cout << "STATS -> Show you your stats (HP, Atk, Def, weapons, armor)." << endl;
@@ -239,7 +239,7 @@ void World::PrintHelp()
 	cout << "EXIT_GAME -> Equit from the game." << endl;
 	cout << "TIME -> Print the seconds in the game." << endl;
 	cout << "TAKE <item name> -> Take an item from the room." << endl;
-	cout << "USER <item name> <direction> (NORTH/SOUTH/EAST/WEST) > -> Open closed gates." << endl;
+	cout << "USE <item name> <direction> (NORTH/SOUTH/EAST/WEST) > -> Open closed gates." << endl;
 	cout << "DROP <item name> -> Drop items from your inventory." << endl;
 	cout << "EQUIP <item name> -> Equip items from your inventory, you can have two weapons and one armor." << endl;
 	cout << "UNEQUIP <item name> -> unique items from you." << endl;
