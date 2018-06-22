@@ -4,7 +4,7 @@ This version of Zork is implemented with educational purposes.
 In this game, you are in a dangerous situation where you need to rescue your sister. She is trapped in the biotech lab where she works and it seems that some experiment went wrong. Too many people died, but be careful because not all of them remained dead.
 
 # Play the game!
-- Go to the release section, download the last released version version of the game (.zip)
+- Go to the release section, download the last released version of the game (.zip)
 - Unzipped
 - Execute Zork.exe (Sometimes windows alert to you with this could be a virus... but it's not :))
 - Play!
