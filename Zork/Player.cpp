@@ -106,6 +106,10 @@ void Player::Open(string pItem)
 	{
 		Player::IntroduceItemInTheInventory(item);
 	}
+	else
+	{
+		cout << "There is no item named like that." << endl;
+	}
 }
 
 void Player::Read(string pItem)

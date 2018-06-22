@@ -3,13 +3,13 @@
 
 World::World()
 {
-	Room* bioTechParking = new Room("Biotechnology lab parking.", "This parking seems to be abandoned, actually everything looks like that, there is only the biotechnology lab where my sister is trapped in the north, an ambulance and my car."); 
+	Room* bioTechParking = new Room("Biotechnology lab parking.", "This parking seems to be abandoned, actually everything looks like that, there is only the biotechnology lab where my sister is trapped in the north, an ambulance in the east and my car the south."); 
 	Room* car = new Room("My car.", "Finally, this craziness, it's over, let's go home, mom is waiting for us.", true);
 	Room* ambulance = new Room("Ambulance.", "Oh my god! I don't know what I'm going to need, let me take a look and see what can be useful..");
 	Room* reception = new Room("Reception.", "There is no one here, I have to find my sister right now, she told me she's stuck in her lab, but which one is it? I can see two hallways and one elevator."); 
 	Room* securityRoom = new Room("Security room.", "Jesus! what it's going on here, there are two dead bodies, one of them is a doctor, or what it left of him. There is also a closet.");
-	Room* restRoom = new Room("Rest room.", "This is weird where is everyone? where is my sister?.");  
-	Room* hallWay = new Room("Hallway.", "Ok! I'm close I have to be careful, I don't know what I can found here. There are two labs in here, the lab A to the east  and the lab B to the west.");
+	Room* restRoom = new Room("Rest room.", "This is weird where is everyone? where is my sister?");  
+	Room* hallWay = new Room("Hallway.", "Ok! I'm close I have to be careful, I don't know what I can find here. There are two labs in here, the lab A to the east  and the lab B to the west.");
 	Room* labA = new Room("Lab A.", "This is the biggest, fancy lab I've ever seen before."); 
 	Room* labB = new Room("Lab B.", "Crap, there was a massacre here!"); 
 
@@ -26,7 +26,7 @@ World::World()
 	mapOnTheWall->SetPosibleToTake(false);
 	mapOnTheWall->SetNote("Ok, in the north of the Reception is the hallway and there are two labs, lab A to the east and lab B to the west.");
 
-	Item* deadDoctor = new Item("DOCTOR", "It is the weird doctor, I bet all of this is his foul, Caroline told me he was doing some dangerous experiments.");
+	Item* deadDoctor = new Item("DOCTOR", "It is the weird doctor, I bet all of this is his fault, Caroline told me he was doing some dangerous experiments.");
 	deadDoctor->SetPosibleToTake(false);
 	deadDoctor->PutItemInside(key);
 
@@ -79,7 +79,7 @@ World::World()
 	creatures.push_back(rat);
 	creatures.push_back(zombie);
 
-	Npc* sister = new Npc("SISTER", "Finally, I found you!! fast go with me, we have to leave, the car is outside waiting for us..", labA, this);
+	Npc* sister = new Npc("SISTER", "Finally, I found you!! quick go with me, we have to leave, the car is outside waiting for us..", labA, this);
 
 	map<string, string> dialogue;
 	dialogue.insert(pair<string, string>("HI", "Finally you are here."));
@@ -243,6 +243,7 @@ void World::PrintHelp()
 	cout << "DROP <item name> -> Drop items from your inventory." << endl;
 	cout << "EQUIP <item name> -> Equip items from your inventory, you can have two weapons and one armor." << endl;
 	cout << "UNEQUIP <item name> -> unique items from you." << endl;
+	cout << "ATTACK <Creature> -> Attack a specific creature." << endl;
 	cout << "READ <item> -> Read items if there are readable." << endl;
 	cout << "OPEN <item> -> Open items and take the items inside if the item is a container." << endl;
 	cout << "LOOT <item> -> LOOT items and take the items inside if the item is a container." << endl;
