@@ -18,7 +18,7 @@ This is the list of commands and how to use them (The command could be use on up
 - EXIT_GAME - Equit from the game.
 - TIME - Print the seconds in the game.
 - TAKE item_name - Take an item from the room.
-- USER item_name direction (NORTH/SOUTH/EAST/WEST)  - Open closed gates.
+- USE item_name direction (NORTH/SOUTH/EAST/WEST)  - Open closed gates.
 - DROP item_name - Drop items from your inventory.
 - EQUIP item_name - Equip items from your inventory, you can have two weapons and one armor.
 - UNEQUIP item_name - unique items from you.
