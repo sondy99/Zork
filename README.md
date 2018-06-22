@@ -11,40 +11,40 @@ In this game, you are in a dangerous situation where you need to rescue your sis
 
 # Commands list.
 This is the list of commands and how to use them (The command could be use on upper or lower case).
-		- NORTH/SOUTH/EAST/WEST -> To navigate through the world.
-		- INVENTORY -> Show you your current inventory.
-		- STATS -> Show you your stats (HP, Atk, Def, weapons, armor).
-		- LOOK -> Take a look at the current location.
-		- EXIT_GAME -> Equit from the game.
-		- TIME -> Print the seconds in the game.
-		- TAKE <item name> -> Take an item from the room.
-		- USER <item name> <direction> (NORTH/SOUTH/EAST/WEST) > -> Open closed gates.
-		- DROP <item name> -> Drop items from your inventory.
-		- EQUIP <item name> -> Equip items from your inventory, you can have two weapons and one armor.
-		- UNEQUIP <item name> -> unique items from you.
-		- ATTACK <Creature> -> Attack a specific creature.
-		- READ <item> -> Read items if there are readable.
-		- OPEN <item> -> Open items and take the items inside if the item is a container.
-		- LOOT <item> -> LOOT items and take the items inside if the item is a container.
-		- HI <npcName> -> Starts a conversation with an NPC.
-		- BYE -> Ends a conversation with an NPC.
-		- GO -> Tells your sister to go and she is going with you.
+- NORTH/SOUTH/EAST/WEST -> To navigate through the world.
+- INVENTORY -> Show you your current inventory.
+- STATS -> Show you your stats (HP, Atk, Def, weapons, armor).
+- LOOK -> Take a look at the current location.
+- EXIT_GAME -> Equit from the game.
+- TIME -> Print the seconds in the game.
+- TAKE <item name> -> Take an item from the room.
+- USER <item name> <direction> (NORTH/SOUTH/EAST/WEST) > -> Open closed gates.
+- DROP <item name> -> Drop items from your inventory.
+- EQUIP <item name> -> Equip items from your inventory, you can have two weapons and one armor.
+- UNEQUIP <item name> -> unique items from you.
+- ATTACK <Creature> -> Attack a specific creature.
+- READ <item> -> Read items if there are readable.
+- OPEN <item> -> Open items and take the items inside if the item is a container.
+- LOOT <item> -> LOOT items and take the items inside if the item is a container.
+- HI <npcName> -> Starts a conversation with an NPC.
+- BYE -> Ends a conversation with an NPC.
+- GO -> Tells your sister to go and she is going with you.
 
 # Quickest way to finish the game.
 Put the next sequence of commands:
-		- north
-		- east
-		- loot doctor
-		- west
-		- north
-		- use key east
-		- east
-		- hi sister
-		- go
-		- west
-		- south
-		- south
-		- south
+- north
+- east
+- loot doctor
+- west
+- north
+- use key east
+- east
+- hi sister
+- go
+- west
+- south
+- south
+- south
 		
 Game Over!
 
