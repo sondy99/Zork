@@ -57,4 +57,4 @@ Daniel Cardoza Carosi
 # Special thanks.
 Thanks Emily for your support and patience.
 
-Thanks for test it and for your comments: Bruno Terra, Pablo Grandas, Daniel Conde, Adrian Matteo.
+Thanks for testing and for your comments: Bruno Terra, Pablo Grandas, Daniel Conde, Adrian Matteo.
